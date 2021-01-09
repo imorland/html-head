@@ -31,12 +31,12 @@ class UpdateHeaderItemHandler
 
         $header = Header::findOrFail($command->headerId);
 
-        if (isset($data['description'])) {
-            $header->description = $data['attributes']['description'];
+        if (isset($data['data']['attributes']['description'])) {
+            $header->description = $data['data']['attributes']['description'];
         }
 
-        if (isset($data['header'])) {
-            $header->header = $data['header'];
+        if (isset($data['data']['attributes']['header'])) {
+            $header->header = $data['data']['attributes']['header'];
         }
 
         if (isset($data['active'])) {

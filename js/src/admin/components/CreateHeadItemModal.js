@@ -6,9 +6,10 @@ export default class CreateHeadItemModal extends Modal {
     oninit(vnode) {
         super.oninit(vnode);
 
-        this.description = Stream('');
-        this.header = Stream('');
-        this.active = Stream('');
+        this.item = this.attrs.item || app.store.createRecord('html-headers');
+
+        this.description = Stream(this.item.description() || '');
+        this.header = Stream(this.item.header() || '');
 
         this.loading = false;
     }
@@ -18,7 +19,7 @@ export default class CreateHeadItemModal extends Modal {
     }
 
     title() {
-        return app.translator.trans('ianm-html-head.admin.modal.title');
+        return this.item.exists ? app.translator.trans('ianm-html-head.admin.modal.edit_title') : app.translator.trans('ianm-html-head.admin.modal.create_title');
     }
 
     content() {
@@ -57,6 +58,6 @@ export default class CreateHeadItemModal extends Modal {
             header: this.header(),
         };
 
-        app.store.createRecord('html-headers').save(attrs).then(this.hide.bind(this), this.onerror.bind(this), this.loaded.bind(this));
+        this.item.save(attrs).then(this.hide.bind(this), this.onerror.bind(this), this.loaded.bind(this));
     }
 }

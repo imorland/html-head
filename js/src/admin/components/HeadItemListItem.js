@@ -1,6 +1,7 @@
 import Component from 'flarum/Component';
 import Button from 'flarum/components/Button';
 import Switch from 'flarum/components/Switch';
+import CreateHeadItemModal from './CreateHeadItemModal';
 
 export default class HeadItemListItem extends Component {
     oninit(vnode) {
@@ -42,6 +43,13 @@ export default class HeadItemListItem extends Component {
                     <div className="Button--group">
                         {Button.component(
                             {
+                                className: 'Button Button--secondary',
+                                onclick: () => app.modal.show(CreateHeadItemModal, {item: this.item}),
+                            },
+                            app.translator.trans('ianm-html-head.admin.table.edit_button')
+                        )}
+                        {Button.component(
+                            {
                                 className: 'Button Button--danger',
                                 onclick: () => {
                                     this.deleting = true;
@@ -49,13 +57,6 @@ export default class HeadItemListItem extends Component {
                                         this.deleting = false;
                                         m.redraw();
                                     });
-                                    // app.request({
-                                    //     method: 'DELETE',
-                                    //     url: `${app.forum.attribute('apiUrl')}/html-headers/${this.item.id()}`,
-                                    // }).then(() => {
-                                    //     this.deleting = false;
-                                    //     console.log(this);
-                                    // });
                                 },
                                 loading: this.deleting,
                             },

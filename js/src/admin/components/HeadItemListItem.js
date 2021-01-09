@@ -45,14 +45,17 @@ export default class HeadItemListItem extends Component {
                                 className: 'Button Button--danger',
                                 onclick: () => {
                                     this.deleting = true;
-
-                                    app.request({
-                                        method: 'DELETE',
-                                        url: `${app.forum.attribute('apiUrl')}/html-headers/${this.item.id()}`,
-                                    }).then(() => {
+                                    this.item.delete().then(() => {
                                         this.deleting = false;
                                         m.redraw();
                                     });
+                                    // app.request({
+                                    //     method: 'DELETE',
+                                    //     url: `${app.forum.attribute('apiUrl')}/html-headers/${this.item.id()}`,
+                                    // }).then(() => {
+                                    //     this.deleting = false;
+                                    //     console.log(this);
+                                    // });
                                 },
                                 loading: this.deleting,
                             },

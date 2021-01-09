@@ -5,8 +5,4 @@ export default class HeadItem extends Model {
     description = Model.attribute('description');
     header = Model.attribute('header');
     active = Model.attribute('active');
-
-    apiEndpoint() {
-        return '/html-headers';
-    }
 }

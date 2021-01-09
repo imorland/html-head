@@ -6,7 +6,7 @@ ianm-html-head:
       description_label: Description
       header_label: Header
       active_label: Active
-      empty_text: No results
+      empty_text: No entries
       delete_button: Delete 
 
     modal:

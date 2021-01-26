@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - master
+            - beta13
 
 jobs:
     build:

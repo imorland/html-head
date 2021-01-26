@@ -2,6 +2,9 @@ ianm-html-head:
   admin:
     create_button: Create
 
+    nav:
+      description: Add custom items to the HTML <head> attributes
+    
     table:
       description_label: Description
       header_label: Header

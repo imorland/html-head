@@ -12,7 +12,7 @@
     "forum": "https://discuss.flarum.org/d/25907"
   },
   "require": {
-    "flarum/core": "^0.1.0-beta.15"
+    "flarum/core": ">=0.1.0-beta.13 <0.1.0-beta.14"
   },
   "authors": [
     {
@@ -28,7 +28,6 @@
   "extra": {
     "flarum-extension": {
       "title": "HTML Head Items",
-      "category": "other",
       "icon": {
         "name": "fas fa-heading",
         "backgroundColor": "#008000",

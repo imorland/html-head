@@ -12,11 +12,14 @@
 namespace IanM\HtmlHead\Command;
 
 use Carbon\Carbon;
+use Flarum\User\AssertPermissionTrait;
 use Flarum\User\Exception\PermissionDeniedException;
 use IanM\HtmlHead\Header;
 
 class UpdateHeaderItemHandler
 {
+    use AssertPermissionTrait;
+    
     /**
      * @param UpdateHeaderItem $command
      *
@@ -26,7 +29,7 @@ class UpdateHeaderItemHandler
      */
     public function handle(UpdateHeaderItem $command)
     {
-        $command->actor->assertAdmin();
+        $this->assertAdmin($command->actor);
         $data = $command->data;
 
         $header = Header::findOrFail($command->headerId);
@@ -39,8 +42,8 @@ class UpdateHeaderItemHandler
             $header->header = $data['data']['attributes']['header'];
         }
 
-        if (isset($data['active'])) {
-            $header->active = $data['active'];
+        if (isset($data['data']['attributes']['active'])) {
+            $header->active = $data['data']['attributes']['active'];
         }
 
         $header->updated_at = Carbon::now();

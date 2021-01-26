@@ -1,15 +1,12 @@
 import Modal from 'flarum/components/Modal';
 import Button from 'flarum/components/Button';
-import Stream from 'flarum/utils/Stream';
 
 export default class CreateHeadItemModal extends Modal {
-    oninit(vnode) {
-        super.oninit(vnode);
+    init() {
+        this.item = this.props.item || app.store.createRecord('html-headers');
 
-        this.item = this.attrs.item || app.store.createRecord('html-headers');
-
-        this.description = Stream(this.item.description() || '');
-        this.header = Stream(this.item.header() || '');
+        this.description = m.prop(this.item.description() || '');
+        this.header = m.prop(this.item.header() || '');
 
         this.loading = false;
     }

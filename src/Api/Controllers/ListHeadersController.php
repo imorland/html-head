@@ -14,6 +14,7 @@ namespace IanM\HtmlHead\Api\Controllers;
 use Flarum\Api\Controller\AbstractListController;
 use Flarum\Http\UrlGenerator;
 use Flarum\Search\SearchCriteria;
+use Flarum\User\AssertPermissionTrait;
 use IanM\HtmlHead\Api\Serializers\HeaderSerializer;
 use IanM\HtmlHead\Header;
 use IanM\HtmlHead\Search\HeadItemSearcher;
@@ -23,6 +24,8 @@ use Tobscure\JsonApi\Document;
 
 class ListHeadersController extends AbstractListController
 {
+    use AssertPermissionTrait;
+    
     /**
      * {@inheritdoc}
      */
@@ -55,7 +58,7 @@ class ListHeadersController extends AbstractListController
     {
         $actor = $request->getAttribute('actor');
 
-        $actor->assertAdmin();
+        $this->assertAdmin($actor);
 
         $query = Arr::get($this->extractFilter($request), 'q');
         $sort = $this->extractSort($request);

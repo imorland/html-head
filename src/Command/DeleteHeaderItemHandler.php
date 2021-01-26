@@ -11,10 +11,13 @@
 
 namespace IanM\HtmlHead\Command;
 
+use Flarum\User\AssertPermissionTrait;
 use IanM\HtmlHead\Header;
 
 class DeleteHeaderItemHandler
 {
+    use AssertPermissionTrait;
+    
     /**
      * @param DeleteHeader $command
      *
@@ -22,7 +25,7 @@ class DeleteHeaderItemHandler
      */
     public function handle(DeleteHeaderItem $command)
     {
-        $command->actor->assertAdmin();
+        $this->assertAdmin($command->actor);
 
         $header = Header::findOrFail($command->headerId);
 

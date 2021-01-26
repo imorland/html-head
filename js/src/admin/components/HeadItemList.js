@@ -6,17 +6,11 @@ import HeadItemListItem from './HeadItemListItem';
 import CreateHeadItemModal from './CreateHeadItemModal';
 
 export default class HeadItemList extends Component {
-    oninit(vnode) {
-        super.oninit(vnode);
-
+    init() {
         this.loading = true;
 
         this.page = 0;
         this.pageSize = 20;
-    }
-
-    oncreate(vnode) {
-        super.oncreate(vnode);
 
         this.refresh();
     }
@@ -47,7 +41,7 @@ export default class HeadItemList extends Component {
                         {
                             className: 'Button Button--primary',
                             icon: 'fas fa-plus',
-                            onclick: () => app.modal.show(CreateHeadItemModal),
+                            onclick: () => app.modal.show(new CreateHeadItemModal()),
                         },
                         app.translator.trans('ianm-html-head.admin.create_button')
                     )}

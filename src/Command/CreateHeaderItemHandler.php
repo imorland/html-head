@@ -12,10 +12,13 @@
 namespace IanM\HtmlHead\Command;
 
 use Carbon\Carbon;
+use Flarum\User\AssertPermissionTrait;
 use IanM\HtmlHead\Header;
 
 class CreateHeaderItemHandler
 {
+    use AssertPermissionTrait;
+    
     /**
      * @param CreateHeaderItem $command
      *
@@ -25,7 +28,7 @@ class CreateHeaderItemHandler
      */
     public function handle(CreateHeaderItem $command)
     {
-        $command->actor->assertAdmin();
+        $this->assertAdmin($command->actor);
         $data = $command->data;
 
         $headerItem = new Header();

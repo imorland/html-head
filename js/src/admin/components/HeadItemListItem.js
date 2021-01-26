@@ -4,10 +4,8 @@ import Switch from 'flarum/components/Switch';
 import CreateHeadItemModal from './CreateHeadItemModal';
 
 export default class HeadItemListItem extends Component {
-    oninit(vnode) {
-        super.oninit(vnode);
-
-        this.item = this.attrs.headItem;
+    init() {
+        this.item = this.props.headItem;
     }
 
     view() {
@@ -20,23 +18,7 @@ export default class HeadItemListItem extends Component {
                 <td>
                     {Switch.component({
                         state: this.item.data.attributes.active,
-                        onchange: (value) => {
-                            this.activeLoading = true;
-
-                            app.request({
-                                method: 'PATCH',
-                                url: `${app.forum.attribute('apiUrl')}/html-headers/${this.item.id()}`,
-                                body: {
-                                    active: value,
-                                },
-                            }).then((response) => {
-                                this.item.data = response.data;
-                                this.activeLoading = false;
-
-                                m.redraw();
-                            });
-                        },
-                        loading: this.activeLoading,
+                        onchange: this.update.bind(this),
                     })}
                 </td>
                 <td>
@@ -44,7 +26,7 @@ export default class HeadItemListItem extends Component {
                         {Button.component(
                             {
                                 className: 'Button Button--secondary',
-                                onclick: () => app.modal.show(CreateHeadItemModal, {item: this.item}),
+                                onclick: () => app.modal.show(new CreateHeadItemModal({item: this.item})),
                             },
                             app.translator.trans('ianm-html-head.admin.table.edit_button')
                         )}
@@ -66,5 +48,16 @@ export default class HeadItemListItem extends Component {
                 </td>
             </tr>
         );
+    }
+
+    update(active) {
+        this.props.headItem
+            .save({
+                decription: this.props.headItem.data.attributes.description,
+                header: this.props.headItem.data.attributes.header,
+                active: active,
+                type: 'html-headers',
+            })
+            .then(() => m.redraw());
     }
 }

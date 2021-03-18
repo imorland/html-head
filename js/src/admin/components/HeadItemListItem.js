@@ -1,6 +1,6 @@
-import Component from 'flarum/Component';
-import Button from 'flarum/components/Button';
-import Switch from 'flarum/components/Switch';
+import Component from 'flarum/common/Component';
+import Button from 'flarum/common/components/Button';
+import Switch from 'flarum/common/components/Switch';
 import CreateHeadItemModal from './CreateHeadItemModal';
 
 export default class HeadItemListItem extends Component {
@@ -44,7 +44,7 @@ export default class HeadItemListItem extends Component {
                         {Button.component(
                             {
                                 className: 'Button Button--secondary',
-                                onclick: () => app.modal.show(CreateHeadItemModal, {item: this.item}),
+                                onclick: () => app.modal.show(CreateHeadItemModal, { item: this.item }),
                             },
                             app.translator.trans('ianm-html-head.admin.table.edit_button')
                         )}

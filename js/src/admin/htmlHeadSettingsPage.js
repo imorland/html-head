@@ -1,4 +1,4 @@
-import ExtensionPage from 'flarum/components/ExtensionPage';
+import ExtensionPage from 'flarum/common/components/ExtensionPage';
 import HeadItem from './components/HeadItemList';
 
 export default class HtmlHeadSettingsPage extends ExtensionPage {

@@ -11,15 +11,18 @@
 
 namespace IanM\HtmlHead\Search;
 
-use Flarum\Search\ApplySearchParametersTrait;
+use Flarum\Query\ApplyQueryParametersTrait;
+use Flarum\Query\QueryCriteria;
+use Flarum\Query\QueryResults;
 use Flarum\Search\GambitManager;
 use Flarum\Search\SearchCriteria;
 use Flarum\Search\SearchResults;
+use Flarum\Search\SearchState;
 use IanM\HtmlHead\Repositories\HtmlHeadRepository;
 
 class HeadItemSearcher
 {
-    use ApplySearchParametersTrait;
+    use ApplyQueryParametersTrait;
 
     /**
      * @var GambitManager
@@ -48,7 +51,7 @@ class HeadItemSearcher
      *
      * @return SearchResults
      */
-    public function search(SearchCriteria $criteria, $limit = null, $offset = 0)
+    public function search(QueryCriteria $criteria, $limit = null, $offset = 0): QueryResults
     {
         $actor = $criteria->actor;
 
@@ -58,7 +61,7 @@ class HeadItemSearcher
             $query->whereIsHidden(0);
         }
 
-        $search = new HeadItemSearch($query->getQuery(), $actor);
+        $search = new SearchState($query->getQuery(), $actor);
 
         $this->gambits->apply($search, $criteria->query);
 
@@ -66,12 +69,12 @@ class HeadItemSearcher
         $this->applyOffset($search, $offset);
         $this->applyLimit($search, $limit + 1);
 
-        $bannedIPs = $query->get();
+        $headItems = $query->get();
 
-        if ($areMoreResults = ($limit > 0 && $bannedIPs->count() > $limit)) {
-            $bannedIPs->pop();
+        if ($areMoreResults = ($limit > 0 && $headItems->count() > $limit)) {
+            $headItems->pop();
         }
 
-        return new SearchResults($bannedIPs, $areMoreResults);
+        return new QueryResults($headItems, $areMoreResults);
     }
 }

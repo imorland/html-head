@@ -1,6 +1,6 @@
-import Modal from 'flarum/components/Modal';
-import Button from 'flarum/components/Button';
-import Stream from 'flarum/utils/Stream';
+import Modal from 'flarum/common/components/Modal';
+import Button from 'flarum/common/components/Button';
+import Stream from 'flarum/common/utils/Stream';
 
 export default class CreateHeadItemModal extends Modal {
     oninit(vnode) {
@@ -19,7 +19,9 @@ export default class CreateHeadItemModal extends Modal {
     }
 
     title() {
-        return this.item.exists ? app.translator.trans('ianm-html-head.admin.modal.edit_title') : app.translator.trans('ianm-html-head.admin.modal.create_title');
+        return this.item.exists
+            ? app.translator.trans('ianm-html-head.admin.modal.edit_title')
+            : app.translator.trans('ianm-html-head.admin.modal.create_title');
     }
 
     content() {

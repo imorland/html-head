@@ -13,9 +13,8 @@ namespace IanM\HtmlHead\Api\Controllers;
 
 use Flarum\Api\Controller\AbstractListController;
 use Flarum\Http\UrlGenerator;
-use Flarum\Search\SearchCriteria;
+use Flarum\Query\QueryCriteria;
 use IanM\HtmlHead\Api\Serializers\HeaderSerializer;
-use IanM\HtmlHead\Header;
 use IanM\HtmlHead\Search\HeadItemSearcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -29,7 +28,7 @@ class ListHeadersController extends AbstractListController
     public $serializer = HeaderSerializer::class;
 
     /**
-     * @var PageSearcher
+     * @var HeadItemSearcher
      */
     protected $searcher;
 
@@ -53,6 +52,7 @@ class ListHeadersController extends AbstractListController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        /** @var \Flarum\User\User */
         $actor = $request->getAttribute('actor');
 
         $actor->assertAdmin();
@@ -60,7 +60,7 @@ class ListHeadersController extends AbstractListController
         $query = Arr::get($this->extractFilter($request), 'q');
         $sort = $this->extractSort($request);
 
-        $criteria = new SearchCriteria($actor, $query, $sort);
+        $criteria = new QueryCriteria($actor, $query, $sort);
         $limit = $this->extractLimit($request);
         $offset = $this->extractOffset($request);
         $results = $this->searcher->search($criteria, $limit, $offset);

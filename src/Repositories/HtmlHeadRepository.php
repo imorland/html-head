@@ -15,8 +15,6 @@ use Flarum\User\User;
 use IanM\HtmlHead\Header;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 class HtmlHeadRepository
 {

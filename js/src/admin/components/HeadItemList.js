@@ -1,7 +1,7 @@
-import Component from 'flarum/Component';
-import LoadingIndicator from 'flarum/components/LoadingIndicator';
-import Placeholder from 'flarum/components/Placeholder';
-import Button from 'flarum/components/Button';
+import Component from 'flarum/common/Component';
+import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
+import Placeholder from 'flarum/common/components/Placeholder';
+import Button from 'flarum/common/components/Button';
 import HeadItemListItem from './HeadItemListItem';
 import CreateHeadItemModal from './CreateHeadItemModal';
 

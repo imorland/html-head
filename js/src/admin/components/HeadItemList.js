@@ -10,9 +10,6 @@ export default class HeadItemList extends Component {
         super.oninit(vnode);
 
         this.loading = true;
-
-        this.page = 0;
-        this.pageSize = 20;
     }
 
     oncreate(vnode) {
@@ -22,24 +19,6 @@ export default class HeadItemList extends Component {
     }
 
     view() {
-        let next, prev;
-
-        if (this.nextResults === true) {
-            next = Button.component({
-                className: 'Button Button--PageList-next',
-                icon: 'fas fa-angle-right',
-                onclick: this.loadNext.bind(this),
-            });
-        }
-
-        if (this.prevResults === true) {
-            prev = Button.component({
-                className: 'Button Button--PageList-prev',
-                icon: 'fas fa-angle-left',
-                onclick: this.loadPrev.bind(this),
-            });
-        }
-
         return (
             <div>
                 <div className="HtmlHeadSettingsPage--controls">
@@ -66,20 +45,11 @@ export default class HeadItemList extends Component {
                                     <th />
                                 </tr>
                             </thead>
-                            <tbody>
-                                {app.store
-                                    .all('html-headers')
-                                    .slice(this.page, this.page + this.pageSize)
-                                    .map((headItem) => HeadItemListItem.component({ headItem }))}
-                            </tbody>
+                            <tbody>{app.store.all('html-headers').map((headItem) => HeadItemListItem.component({ headItem }))}</tbody>
                         </table>
                     ) : (
                         <div>{Placeholder.component({ text: app.translator.trans('ianm-html-head.admin.table.empty_text') })}</div>
                     )}
-                </div>
-                <div>
-                    {next}
-                    {prev}
                 </div>
             </div>
         );
@@ -96,33 +66,7 @@ export default class HeadItemList extends Component {
      * @return {Promise}
      */
     loadResults() {
-        const offset = this.page * this.pageSize;
-
-        return app.store.find('html-headers', { page: { offset, limit: this.pageSize } });
-    }
-
-    /**
-     * Load the next page of results.
-     *
-     * @public
-     */
-    loadNext() {
-        if (this.nextResults === true) {
-            this.page++;
-            this.refresh();
-        }
-    }
-
-    /**
-     * Load the previous page of results.
-     *
-     * @public
-     */
-    loadPrev() {
-        if (this.prevResults === true) {
-            this.page--;
-            this.refresh();
-        }
+        return app.store.find('html-headers');
     }
 
     /**
@@ -133,9 +77,6 @@ export default class HeadItemList extends Component {
      */
     parseResults(results) {
         this.loading = false;
-
-        this.nextResults = !!results.payload.links.next;
-        this.prevResults = !!results.payload.links.prev;
 
         m.redraw();
     }

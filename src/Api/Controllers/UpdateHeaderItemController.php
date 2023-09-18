@@ -15,6 +15,7 @@ use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Http\RequestUtil;
 use IanM\HtmlHead\Api\Serializers\HeaderSerializer;
 use IanM\HtmlHead\Command\UpdateHeaderItem;
+use IanM\HtmlHead\Validator\HeaderItemValidator;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,6 +29,12 @@ class UpdateHeaderItemController extends AbstractShowController
     public $serializer = HeaderSerializer::class;
 
     /**
+     *
+     * @var HeaderItemValidator
+     */
+    protected $validator;
+
+    /**
      * @var Dispatcher
      */
     protected $bus;
@@ -35,8 +42,9 @@ class UpdateHeaderItemController extends AbstractShowController
     /**
      * @param Dispatcher $bus
      */
-    public function __construct(Dispatcher $bus)
+    public function __construct(HeaderItemValidator $validator, Dispatcher $bus)
     {
+        $this->validator = $validator;
         $this->bus = $bus;
     }
 
@@ -48,6 +56,8 @@ class UpdateHeaderItemController extends AbstractShowController
         $actor = RequestUtil::getActor($request);
         $id = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody();
+
+        $this->validator->assertValid($data);
 
         return $this->bus->dispatch(
             new UpdateHeaderItem($actor, $id, $data)

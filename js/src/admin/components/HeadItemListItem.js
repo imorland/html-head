@@ -20,7 +20,7 @@ export default class HeadItemListItem extends Component {
         </td>
         <td>
           {Switch.component({
-            state: this.item.data.attributes.active,
+            state: this.item.active(),
             onchange: (value) => {
               this.activeLoading = true;
 

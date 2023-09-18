@@ -13,10 +13,22 @@ namespace IanM\HtmlHead\Command;
 
 use Carbon\Carbon;
 use Flarum\User\Exception\PermissionDeniedException;
+use IanM\HtmlHead\Event\HeaderUpdated;
 use IanM\HtmlHead\Header;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class UpdateHeaderItemHandler
 {
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
+    
+    public function __construct(Dispatcher $events)
+    {
+        $this->events = $events;
+    }
+    
     /**
      * @param UpdateHeaderItem $command
      *
@@ -46,6 +58,10 @@ class UpdateHeaderItemHandler
         $header->updated_at = Carbon::now();
 
         $header->save();
+
+        $this->events->dispatch(
+            new HeaderUpdated($header, $command->actor, $data)
+        );
 
         return $header;
     }

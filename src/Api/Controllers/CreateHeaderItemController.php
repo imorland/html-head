@@ -15,6 +15,7 @@ use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Http\RequestUtil;
 use IanM\HtmlHead\Api\Serializers\HeaderSerializer;
 use IanM\HtmlHead\Command\CreateHeaderItem;
+use IanM\HtmlHead\Validator\HeaderItemValidator;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,6 +29,12 @@ class CreateHeaderItemController extends AbstractCreateController
     public $serializer = HeaderSerializer::class;
 
     /**
+     *
+     * @var HeaderItemValidator
+     */
+    protected $validator;
+
+    /**
      * @var Dispatcher
      */
     protected $bus;
@@ -35,8 +42,9 @@ class CreateHeaderItemController extends AbstractCreateController
     /**
      * @param Dispatcher $bus
      */
-    public function __construct(Dispatcher $bus)
+    public function __construct(HeaderItemValidator $validator, Dispatcher $bus)
     {
+        $this->validator = $validator;
         $this->bus = $bus;
     }
 
@@ -46,9 +54,12 @@ class CreateHeaderItemController extends AbstractCreateController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = RequestUtil::getActor($request);
+        $data = Arr::get($request->getParsedBody(), 'data', []);
+
+        $this->validator->assertValid($data);
 
         return $this->bus->dispatch(
-            new CreateHeaderItem($actor, Arr::get($request->getParsedBody(), 'data', []))
+            new CreateHeaderItem($actor, $data)
         );
     }
 }

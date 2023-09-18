@@ -12,10 +12,22 @@
 namespace IanM\HtmlHead\Command;
 
 use Carbon\Carbon;
+use IanM\HtmlHead\Event\HeaderCreated;
 use IanM\HtmlHead\Header;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class CreateHeaderItemHandler
 {
+    /**
+     * @var Dispatcher
+     */
+    protected $events;
+    
+    public function __construct(Dispatcher $events)
+    {
+        $this->events = $events;
+    }
+    
     /**
      * @param CreateHeaderItem $command
      *
@@ -37,6 +49,10 @@ class CreateHeaderItemHandler
         $headerItem->updated_at = Carbon::now();
 
         $headerItem->save();
+
+        $this->events->dispatch(
+            new HeaderCreated($headerItem, $command->actor, $data)
+        );
 
         return $headerItem;
     }

@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of ianm/htmlhead.
+ *
+ * Copyright (c) IanM.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ *
+ */
+
 namespace IanM\HtmlHead\Content;
 
 use Flarum\Frontend\Document;
@@ -37,14 +47,14 @@ class AddHeaders
             if (Str::startsWith(trim($header), '<') && Str::endsWith(trim($header), '>')) {
                 $document->head[] = $header;
             } else {
-                $this->logger->error('Invalid header: ' . $header);
+                $this->logger->error('Invalid header: '.$header);
             }
         }
     }
 
     protected function getHeaders(): array
     {
-        return $this->cache->remember('active_html_headers', 60, function() {
+        return $this->cache->remember('active_html_headers', 60, function () {
             // Only fetch the 'header' column for active headers
             return Header::where('active', 1)->pluck('header')->toArray();
         });

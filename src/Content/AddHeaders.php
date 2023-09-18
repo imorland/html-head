@@ -42,12 +42,23 @@ class AddHeaders
         $headers = $this->getHeaders();
 
         foreach ($headers as $header) {
-            if (Str::startsWith(trim($header), '<') && Str::endsWith(trim($header), '>')) {
+            if ($this->isValidHeader($header)) {
                 $document->head[] = $header;
             } else {
                 $this->logger->error('[ianm/html-head] Invalid header: '.$header);
             }
         }
+    }
+
+    /**
+     * Check if the given header content is valid.
+     *
+     * @param string $header
+     * @return bool
+     */
+    protected function isValidHeader(string $header): bool
+    {
+        return Str::startsWith(trim($header), '<') && Str::endsWith(trim($header), '>');
     }
 
     /**

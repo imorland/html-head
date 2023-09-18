@@ -45,13 +45,13 @@ class AddHeaders
             if (Str::startsWith(trim($header), '<') && Str::endsWith(trim($header), '>')) {
                 $document->head[] = $header;
             } else {
-                $this->logger->error('[ianm/html-head] Invalid header: ' . $header);
+                $this->logger->error('[ianm/html-head] Invalid header: '.$header);
             }
         }
     }
 
     /**
-     * Retrieve headers either from cache or database
+     * Retrieve headers either from cache or database.
      *
      * @return array
      */

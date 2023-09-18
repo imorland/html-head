@@ -40,6 +40,6 @@ class ClearCache
     public function clearCache($event)
     {
         $this->cache->forget(Header::CACHE_KEY);
-        $this->logger->info('[ianm/html-head] Cleared cache for ' . Header::CACHE_KEY . ' due to ' . get_class($event) . ' event firing.');
+        $this->logger->info('[ianm/html-head] Cleared cache for '.Header::CACHE_KEY.' due to '.get_class($event).' event firing.');
     }
 }

@@ -19,8 +19,8 @@ class HeaderItemValidator extends AbstractValidator
     protected function getRules(): array
     {
         return [
-            'description' => 'required|string',
-            'header'      => 'required|string',
+            'description' => 'required|string|max:200',
+            'header'      => 'required|string|max:300',
         ];
     }
 }

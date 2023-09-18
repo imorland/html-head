@@ -39,7 +39,6 @@ class DeleteHeaderItemController extends AbstractDeleteController
      */
     protected function delete(ServerRequestInterface $request)
     {
-        /** @var \Flarum\User\User */
         $actor = RequestUtil::getActor($request);
 
         $this->bus->dispatch(

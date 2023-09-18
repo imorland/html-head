@@ -16,6 +16,8 @@ use Flarum\Database\AbstractModel;
 
 class Header extends AbstractModel
 {
+    public const CACHE_KEY = 'active_html_headers';
+    
     protected $table = 'html_headers';
 
     public $timestamps = true;

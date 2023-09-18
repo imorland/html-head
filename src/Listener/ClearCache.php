@@ -16,6 +16,7 @@ use Flarum\Foundation\Event\ClearingCache;
 use IanM\HtmlHead\Event\HeaderCreated;
 use IanM\HtmlHead\Event\HeaderDeleted;
 use IanM\HtmlHead\Event\HeaderUpdated;
+use IanM\HtmlHead\Header;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Events\Dispatcher;
 use Psr\Log\LoggerInterface;
@@ -38,7 +39,7 @@ class ClearCache
 
     public function clearCache($event)
     {
-        $this->cache->forget('active_html_headers');
-        $this->logger->info('Cleared cache for active_html_headers due to '.get_class($event).' event.');
+        $this->cache->forget(Header::CACHE_KEY);
+        $this->logger->info('[ianm/html-head] Cleared cache for ' . Header::CACHE_KEY . ' due to ' . get_class($event) . ' event firing.');
     }
 }

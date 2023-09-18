@@ -24,14 +24,14 @@ class CreateHeaderItem
     public $actor;
 
     /**
-     * The attributes of the new draft.
+     * The attributes of the new header.
      *
      * @var array
      */
     public $data;
 
     /**
-     * CreateDraft constructor.
+     * CreateHeaderItem constructor.
      *
      * @param User  $actor
      * @param array $data

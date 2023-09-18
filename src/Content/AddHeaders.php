@@ -39,24 +39,31 @@ class AddHeaders
 
     public function __invoke(Document $document, ServerRequestInterface $request)
     {
-        // Retrieve headers either from cache or database
         $headers = $this->getHeaders();
 
-        // Append each header to the document's head
         foreach ($headers as $header) {
             if (Str::startsWith(trim($header), '<') && Str::endsWith(trim($header), '>')) {
                 $document->head[] = $header;
             } else {
-                $this->logger->error('Invalid header: '.$header);
+                $this->logger->error('[ianm/html-head] Invalid header: ' . $header);
             }
         }
     }
 
+    /**
+     * Retrieve headers either from cache or database
+     *
+     * @return array
+     */
     protected function getHeaders(): array
     {
-        return $this->cache->remember('active_html_headers', 60, function () {
-            // Only fetch the 'header' column for active headers
-            return Header::where('active', 1)->pluck('header')->toArray();
-        });
+        $headers = $this->cache->get(Header::CACHE_KEY);
+
+        if (!$headers) {
+            $headers = Header::where('active', 1)->pluck('header')->toArray();
+            $this->cache->forever(Header::CACHE_KEY, $headers);
+        }
+
+        return $headers;
     }
 }

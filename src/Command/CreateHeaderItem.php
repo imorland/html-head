@@ -1,12 +1,13 @@
 <?php
 
 /*
- * This file is part of ianm/html-head.
+ * This file is part of ianm/htmlhead.
  *
- * Copyright (c) 2021 IanM.
+ * Copyright (c) IanM.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
+ *
  */
 
 namespace IanM\HtmlHead\Command;
@@ -23,14 +24,14 @@ class CreateHeaderItem
     public $actor;
 
     /**
-     * The attributes of the new draft.
+     * The attributes of the new header.
      *
      * @var array
      */
     public $data;
 
     /**
-     * CreateDraft constructor.
+     * CreateHeaderItem constructor.
      *
      * @param User  $actor
      * @param array $data

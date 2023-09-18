@@ -52,8 +52,6 @@ export default class CreateHeadItemModal extends Modal {
   onsubmit(e) {
     e.preventDefault();
 
-    if (!this.header()) return;
-
     this.loading = true;
 
     const attrs = {

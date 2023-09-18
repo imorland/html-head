@@ -1,12 +1,13 @@
 <?php
 
 /*
- * This file is part of ianm/html-head.
+ * This file is part of ianm/htmlhead.
  *
- * Copyright (c) 2021 IanM.
+ * Copyright (c) IanM.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
+ *
  */
 
 namespace IanM\HtmlHead;
@@ -15,13 +16,17 @@ use Flarum\Database\AbstractModel;
 
 class Header extends AbstractModel
 {
-    /**
-     * {@inheritdoc}
-     */
+    public const CACHE_KEY = 'active_html_headers';
+
     protected $table = 'html_headers';
-    
-    /**
-     * {@inheritdoc}
-     */
-    protected $dates = ['created_at', 'updated_at'];
+
+    public $timestamps = true;
+
+    protected $fillable = ['description', 'header', 'active'];
+
+    protected $casts = [
+        'active'     => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 }

@@ -16,13 +16,15 @@ use Flarum\Database\AbstractModel;
 
 class Header extends AbstractModel
 {
-    /**
-     * {@inheritdoc}
-     */
     protected $table = 'html_headers';
 
-    /**
-     * {@inheritdoc}
-     */
-    protected $dates = ['created_at', 'updated_at'];
+    public $timestamps = true;
+
+    protected $fillable = ['description', 'header', 'active'];
+
+    protected $casts = [
+        'active' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
 }

@@ -12,11 +12,11 @@
 
 namespace IanM\HtmlHead\Command;
 
-use Carbon\Carbon;
 use Flarum\User\Exception\PermissionDeniedException;
 use IanM\HtmlHead\Event\HeaderUpdated;
 use IanM\HtmlHead\Header;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 
 class UpdateHeaderItemHandler
 {
@@ -35,34 +35,26 @@ class UpdateHeaderItemHandler
      *
      * @throws PermissionDeniedException
      *
-     * @return mixed
+     * @return Header
      */
-    public function handle(UpdateHeaderItem $command)
+    public function handle(UpdateHeaderItem $command): Header
     {
         $command->actor->assertAdmin();
-        $data = $command->data;
 
         $header = Header::findOrFail($command->headerId);
 
-        if (isset($data['data']['attributes']['description'])) {
-            $header->description = $data['data']['attributes']['description'];
+        $header->description = Arr::get($command->data, 'data.attributes.description', $header->description);
+        $header->header = Arr::get($command->data, 'data.attributes.header', $header->header);
+        $header->active = Arr::get($command->data, 'active', $header->active);
+
+        // Only save and dispatch if there are changes
+        if ($header->isDirty()) {
+            $header->save();
+
+            $this->events->dispatch(
+                new HeaderUpdated($header, $command->actor, $command->data)
+            );
         }
-
-        if (isset($data['data']['attributes']['header'])) {
-            $header->header = $data['data']['attributes']['header'];
-        }
-
-        if (isset($data['active'])) {
-            $header->active = $data['active'];
-        }
-
-        $header->updated_at = Carbon::now();
-
-        $header->save();
-
-        $this->events->dispatch(
-            new HeaderUpdated($header, $command->actor, $data)
-        );
 
         return $header;
     }

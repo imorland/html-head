@@ -12,10 +12,10 @@
 
 namespace IanM\HtmlHead\Command;
 
-use Carbon\Carbon;
 use IanM\HtmlHead\Event\HeaderCreated;
 use IanM\HtmlHead\Header;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
 
 class CreateHeaderItemHandler
 {
@@ -36,23 +36,20 @@ class CreateHeaderItemHandler
      *
      * @return Header
      */
-    public function handle(CreateHeaderItem $command)
+    public function handle(CreateHeaderItem $command): Header
     {
         $command->actor->assertAdmin();
-        $data = $command->data;
+        
+        $headerAttributes = [
+            'description' => Arr::get($command->data, 'attributes.description', ''),
+            'header'      => Arr::get($command->data, 'attributes.header', ''),
+            'active'      => Arr::get($command->data, 'attributes.enabled', false)
+        ];
 
-        $headerItem = new Header();
-
-        $headerItem->description = isset($data['attributes']['description']) ? $data['attributes']['description'] : '';
-        $headerItem->header = isset($data['attributes']['header']) ? $data['attributes']['header'] : '';
-        $headerItem->active = isset($data['attributes']['enabled']) ? $data['attributes']['active'] : false;
-        $headerItem->created_at = Carbon::now();
-        $headerItem->updated_at = Carbon::now();
-
-        $headerItem->save();
+        $headerItem = Header::create($headerAttributes);
 
         $this->events->dispatch(
-            new HeaderCreated($headerItem, $command->actor, $data)
+            new HeaderCreated($headerItem, $command->actor, $command->data)
         );
 
         return $headerItem;

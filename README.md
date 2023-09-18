@@ -1,5 +1,7 @@
 # HTML Head Items
 
+![Extiverse](https://extiverse.com/extension/ianm/html-head/open-graph-image)
+
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/ianm/html-head.svg)](https://packagist.org/packages/ianm/html-head)
 
 A [Flarum](http://flarum.org) extension that offers a seamless way to add custom items to the HTML &lt;head&gt; section of your forum.

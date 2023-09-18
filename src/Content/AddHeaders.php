@@ -54,6 +54,7 @@ class AddHeaders
      * Check if the given header content is valid.
      *
      * @param string $header
+     *
      * @return bool
      */
     protected function isValidHeader(string $header): bool

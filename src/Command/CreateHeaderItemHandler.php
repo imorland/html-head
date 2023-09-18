@@ -39,11 +39,11 @@ class CreateHeaderItemHandler
     public function handle(CreateHeaderItem $command): Header
     {
         $command->actor->assertAdmin();
-        
+
         $headerAttributes = [
             'description' => Arr::get($command->data, 'attributes.description', ''),
             'header'      => Arr::get($command->data, 'attributes.header', ''),
-            'active'      => Arr::get($command->data, 'attributes.enabled', false)
+            'active'      => Arr::get($command->data, 'attributes.enabled', false),
         ];
 
         $headerItem = Header::create($headerAttributes);

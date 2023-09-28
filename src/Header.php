@@ -29,4 +29,14 @@ class Header extends AbstractModel
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    public static function encode(string $string): string
+    {
+        return base64_encode($string);
+    }
+
+    public static function decode(string $string): string
+    {
+        return base64_decode($string);
+    }
 }

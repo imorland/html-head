@@ -16,6 +16,7 @@ use Flarum\Api\Controller\AbstractCreateController;
 use Flarum\Http\RequestUtil;
 use IanM\HtmlHead\Api\Serializers\HeaderSerializer;
 use IanM\HtmlHead\Command\CreateHeaderItem;
+use IanM\HtmlHead\Header;
 use IanM\HtmlHead\Validator\HeaderItemValidator;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Support\Arr;
@@ -55,6 +56,8 @@ class CreateHeaderItemController extends AbstractCreateController
     {
         $actor = RequestUtil::getActor($request);
         $data = Arr::get($request->getParsedBody(), 'data', []);
+
+        Arr::set($data, 'attributes.header', Header::decode(Arr::get($data, 'attributes.header')));
 
         $this->validator->assertValid($data);
 

@@ -58,7 +58,9 @@ class UpdateHeaderItemController extends AbstractShowController
         $id = Arr::get($request->getQueryParams(), 'id');
         $data = $request->getParsedBody();
 
-        Arr::set($data, 'attributes.header', Header::decode(Arr::get($data, 'attributes.header')));
+        if (Arr::has($data, 'attributes.header')) {
+            Arr::set($data, 'attributes.header', Header::decode(Arr::get($data, 'attributes.header')));
+        }
 
         $this->validator->assertValid($data);
 

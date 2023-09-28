@@ -57,7 +57,9 @@ class CreateHeaderItemController extends AbstractCreateController
         $actor = RequestUtil::getActor($request);
         $data = Arr::get($request->getParsedBody(), 'data', []);
 
-        Arr::set($data, 'attributes.header', Header::decode(Arr::get($data, 'attributes.header')));
+        if (Arr::has($data, 'attributes.header')) {
+            Arr::set($data, 'attributes.header', Header::decode(Arr::get($data, 'attributes.header')));
+        }
 
         $this->validator->assertValid($data);
 

@@ -3,6 +3,7 @@ import Component from 'flarum/common/Component';
 import Button from 'flarum/common/components/Button';
 import Switch from 'flarum/common/components/Switch';
 import CreateHeadItemModal from './CreateHeadItemModal';
+import { encode, decode } from '../util/base64';
 
 export default class HeadItemListItem extends Component {
   oninit(vnode) {
@@ -16,7 +17,7 @@ export default class HeadItemListItem extends Component {
       <tr>
         <td>{this.item.description()}</td>
         <td>
-          <code>{this.item.header()}</code>
+          <code>{decode(this.item.header())}</code>
         </td>
         <td>
           {Switch.component({

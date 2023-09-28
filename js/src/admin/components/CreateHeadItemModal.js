@@ -2,6 +2,7 @@ import app from 'flarum/admin/app';
 import Modal from 'flarum/common/components/Modal';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
+import { encode, decode } from '../util/base64';
 
 export default class CreateHeadItemModal extends Modal {
   oninit(vnode) {
@@ -10,7 +11,7 @@ export default class CreateHeadItemModal extends Modal {
     this.item = this.attrs.item || app.store.createRecord('html-headers');
 
     this.description = Stream(this.item.description() || '');
-    this.header = Stream(this.item.header() || '');
+    this.header = Stream(this.item.header() ? decode(this.item.header()) : '');
 
     this.loading = false;
   }
@@ -56,7 +57,7 @@ export default class CreateHeadItemModal extends Modal {
 
     const attrs = {
       description: this.description(),
-      header: this.header(),
+      header: encode(this.header()),
     };
 
     this.item.save(attrs).then(this.hide.bind(this), this.onerror.bind(this), this.loaded.bind(this));

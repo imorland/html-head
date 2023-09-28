@@ -13,6 +13,7 @@
 namespace IanM\HtmlHead\Api\Serializers;
 
 use Flarum\Api\Serializer\AbstractSerializer;
+use IanM\HtmlHead\Header;
 
 class HeaderSerializer extends AbstractSerializer
 {
@@ -29,7 +30,7 @@ class HeaderSerializer extends AbstractSerializer
         return [
             'id'            => $header->id,
             'description'   => $header->description,
-            'header'        => $header->header,
+            'header'        => Header::encode($header->header),
             'active'        => (bool) $header->active,
         ];
     }

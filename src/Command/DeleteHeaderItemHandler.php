@@ -29,11 +29,11 @@ class DeleteHeaderItemHandler
     }
 
     /**
-     * @param DeleteHeader $command
+     * @param DeleteHeaderItem $command
      *
-     * @return mixed
+     * @return Header
      */
-    public function handle(DeleteHeaderItem $command)
+    public function handle(DeleteHeaderItem $command): Header
     {
         $command->actor->assertAdmin();
 

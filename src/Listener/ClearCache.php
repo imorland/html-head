@@ -19,17 +19,14 @@ use IanM\HtmlHead\Event\HeaderUpdated;
 use IanM\HtmlHead\Header;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Events\Dispatcher;
-use Psr\Log\LoggerInterface;
 
 class ClearCache
 {
     public $cache;
-    public $logger;
 
-    public function __construct(Cache $cache, LoggerInterface $logger)
+    public function __construct(Cache $cache)
     {
         $this->cache = $cache;
-        $this->logger = $logger;
     }
 
     public function subscribe(Dispatcher $events)
@@ -40,6 +37,5 @@ class ClearCache
     public function clearCache($event)
     {
         $this->cache->forget(Header::CACHE_KEY);
-        $this->logger->info('[ianm/html-head] Cleared cache for '.Header::CACHE_KEY.' due to '.get_class($event).' event firing.');
     }
 }

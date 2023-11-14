@@ -15,12 +15,11 @@ namespace IanM\HtmlHead;
 use Flarum\Database\AbstractModel;
 
 /**
- * @property int    $id
+ * @property int         $id
  * @property string|null $description
  * @property string|null $header
- * @property bool   $active
+ * @property bool        $active
  */
-
 class Header extends AbstractModel
 {
     public const CACHE_KEY = 'active_html_headers';

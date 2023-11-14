@@ -23,7 +23,7 @@ class HeaderSerializer extends AbstractSerializer
     protected $type = 'html-headers';
 
     /**
-     * {@inheritdoc}
+     * @param \IanM\HtmlHead\Header $header
      */
     protected function getDefaultAttributes($header)
     {

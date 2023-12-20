@@ -15,6 +15,11 @@
         "source": "https://github.com/imorland/html-head",
         "forum": "https://discuss.flarum.org/d/25907"
     },
+    "funding": [
+        {
+            "url": "https://www.buymeacoffee.com/ianm1"
+        }
+    ],
     "require": {
         "flarum/core": "^1.2.0"
     },

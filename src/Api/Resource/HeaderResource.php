@@ -48,15 +48,15 @@ class HeaderResource extends AbstractDatabaseResource
             Endpoint\Index::make()
                 ->authenticated()
                 ->can('administrate'),
-            
+
             Endpoint\Create::make()
                 ->authenticated()
                 ->can('administrate'),
-            
+
             Endpoint\Update::make()
                 ->authenticated()
                 ->can('administrate'),
-            
+
             Endpoint\Delete::make()
                 ->authenticated()
                 ->can('administrate'),
@@ -70,7 +70,7 @@ class HeaderResource extends AbstractDatabaseResource
                 ->requiredOnCreate()
                 ->maxLength(200)
                 ->writable(),
-            
+
             Schema\Str::make('header')
                 ->requiredOnCreate()
                 ->maxLength(300)
@@ -79,14 +79,14 @@ class HeaderResource extends AbstractDatabaseResource
                 ->set(function (Header $header, string $value) {
                     $header->header = Header::decode($value);
                 }),
-            
+
             Schema\Boolean::make('active')
                 ->writable()
                 ->default(false),
-            
+
             Schema\DateTime::make('createdAt')
                 ->visible(),
-            
+
             Schema\DateTime::make('updatedAt')
                 ->visible(),
         ];

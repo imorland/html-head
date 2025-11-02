@@ -22,11 +22,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class ClearCache
 {
-    public $cache;
-
-    public function __construct(Cache $cache)
+    public function __construct(public Cache $cache)
     {
-        $this->cache = $cache;
     }
 
     public function subscribe(Dispatcher $events)

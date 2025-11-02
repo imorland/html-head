@@ -21,20 +21,8 @@ use Psr\Log\LoggerInterface;
 
 class AddHeaders
 {
-    /**
-     * @var Cache
-     */
-    protected $cache;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    public function __construct(Cache $cache, LoggerInterface $logger)
+    public function __construct(protected Cache $cache, protected LoggerInterface $logger)
     {
-        $this->cache = $cache;
-        $this->logger = $logger;
     }
 
     public function __invoke(Document $document, ServerRequestInterface $request)

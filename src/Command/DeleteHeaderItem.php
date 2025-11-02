@@ -17,28 +17,10 @@ use Flarum\User\User;
 class DeleteHeaderItem
 {
     /**
-     * The user performing the action.
-     *
-     * @var User
-     */
-    public $actor;
-
-    /**
-     * The ID of the header.
-     *
-     * @var int
-     */
-    public $headerId;
-
-    /**
      * DeleteHeaderItem constructor.
      *
-     * @param User $actor
-     * @param      $headerId
      */
-    public function __construct(User $actor, $headerId)
+    public function __construct(public User $actor, public $headerId)
     {
-        $this->actor = $actor;
-        $this->headerId = $headerId;
     }
 }

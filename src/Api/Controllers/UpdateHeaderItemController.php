@@ -30,23 +30,8 @@ class UpdateHeaderItemController extends AbstractShowController
      */
     public $serializer = HeaderSerializer::class;
 
-    /**
-     * @var HeaderItemValidator
-     */
-    protected $validator;
-
-    /**
-     * @var Dispatcher
-     */
-    protected $bus;
-
-    /**
-     * @param Dispatcher $bus
-     */
-    public function __construct(HeaderItemValidator $validator, Dispatcher $bus)
+    public function __construct(protected HeaderItemValidator $validator, protected Dispatcher $bus)
     {
-        $this->validator = $validator;
-        $this->bus = $bus;
     }
 
     /**

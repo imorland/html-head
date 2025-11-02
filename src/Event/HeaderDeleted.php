@@ -17,12 +17,7 @@ use IanM\HtmlHead\Header;
 
 class HeaderDeleted
 {
-    public $header;
-    public $actor;
-
-    public function __construct(Header $header, User $actor)
+    public function __construct(public Header $header, public User $actor)
     {
-        $this->header = $header;
-        $this->actor = $actor;
     }
 }

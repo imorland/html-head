@@ -17,14 +17,7 @@ use IanM\HtmlHead\Header;
 
 class HeaderUpdated
 {
-    public $header;
-    public $actor;
-    public $data;
-
-    public function __construct(Header $header, User $actor, array $data)
+    public function __construct(public Header $header, public User $actor, public array $data)
     {
-        $this->header = $header;
-        $this->actor = $actor;
-        $this->data = $data;
     }
 }

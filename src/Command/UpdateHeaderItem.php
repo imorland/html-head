@@ -17,37 +17,10 @@ use Flarum\User\User;
 class UpdateHeaderItem
 {
     /**
-     * The ID of the header item.
-     *
-     * @var int
-     */
-    public $headerId;
-
-    /**
-     * The user performing the action.
-     *
-     * @var User
-     */
-    public $actor;
-
-    /**
-     * The attributes of the header item.
-     *
-     * @var array
-     */
-    public $data;
-
-    /**
      * UpdateHeaderItem constructor.
      *
-     * @param       $headerId
-     * @param User  $actor
-     * @param array $data
-     */
-    public function __construct(User $actor, $headerId, array $data)
+    
+    public function __construct(public User $actor, public $headerId, public array $data)
     {
-        $this->actor = $actor;
-        $this->headerId = $headerId;
-        $this->data = $data;
     }
 }

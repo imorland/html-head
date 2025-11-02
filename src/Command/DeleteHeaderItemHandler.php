@@ -18,14 +18,8 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteHeaderItemHandler
 {
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    public function __construct(Dispatcher $events)
+    public function __construct(protected Dispatcher $events)
     {
-        $this->events = $events;
     }
 
     /**

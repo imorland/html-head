@@ -25,18 +25,16 @@ export default class HeadItemListItem extends Component {
             onchange: (value) => {
               this.activeLoading = true;
 
-              app
-                .request({
-                  method: 'PATCH',
-                  url: `${app.forum.attribute('apiUrl')}/html-headers/${this.item.id()}`,
-                  body: {
-                    active: value,
-                  },
-                })
-                .then((response) => {
-                  this.item.data = response.data;
+              // Save with attributes directly
+              this.item
+                .save({ active: value })
+                .then(() => {
                   this.activeLoading = false;
-
+                  m.redraw();
+                })
+                .catch((error) => {
+                  console.error('Save error:', error);
+                  this.activeLoading = false;
                   m.redraw();
                 });
             },

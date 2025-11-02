@@ -55,11 +55,20 @@ export default class CreateHeadItemModal extends FormModal {
 
     this.loading = true;
 
-    const attrs = {
-      description: this.description(),
-      header: encode(this.header()),
-    };
-
-    this.item.save(attrs).then(this.hide.bind(this), this.onerror.bind(this), this.loaded.bind(this));
+    // Save with attributes directly
+    this.item
+      .save({
+        description: this.description(),
+        header: encode(this.header()),
+      })
+      .then(() => {
+        this.loading = false;
+        this.hide();
+      })
+      .catch((error) => {
+        console.error('Save error:', error);
+        this.loading = false;
+        this.onerror(error);
+      });
   }
 }

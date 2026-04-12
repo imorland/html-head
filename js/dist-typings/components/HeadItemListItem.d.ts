@@ -1,9 +1,18 @@
-export default class HeadItemListItem extends Component<any, undefined> {
-    constructor();
-    oninit(vnode: any): void;
-    item: any;
-    view(): JSX.Element;
-    activeLoading: boolean | undefined;
-    deleting: boolean | undefined;
+/// <reference types="mithril" />
+import Component from 'flarum/common/Component';
+import type HeadItem from '../model/HeadItem';
+interface Attrs {
+    headItem: HeadItem;
+    index: number;
+    dragOverIndex: number | null;
+    onchange: () => void;
+    ondragstart: (index: number) => void;
+    ondragenter: (index: number) => void;
+    ondragend: () => void;
 }
-import Component from "flarum/common/Component";
+export default class HeadItemListItem extends Component<Attrs> {
+    activeLoading: boolean;
+    deleting: boolean;
+    view(): JSX.Element;
+}
+export {};

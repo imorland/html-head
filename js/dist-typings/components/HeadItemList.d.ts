@@ -1,23 +1,14 @@
-export default class HeadItemList extends Component<any, undefined> {
-    constructor();
-    oninit(vnode: any): void;
-    loading: boolean | undefined;
-    oncreate(vnode: any): void;
+import Component from 'flarum/common/Component';
+import type Mithril from 'mithril';
+import type HeadItem from '../model/HeadItem';
+export default class HeadItemList extends Component {
+    loading: boolean;
+    items: HeadItem[];
+    private dragIndex;
+    private dragOverIndex;
+    oninit(vnode: Mithril.Vnode): void;
+    oncreate(vnode: Mithril.VnodeDOM): void;
     view(): JSX.Element;
-    refresh(): Promise<Page[]>;
-    /**
-     * Load a new page of HeadItem results.
-     *
-     * @param {Integer} page number.
-     * @return {Promise}
-     */
-    loadResults(): Promise<any>;
-    /**
-     * Parse results and append them to the page list.
-     *
-     * @param {Page[]} results
-     * @return {Page[]}
-     */
-    parseResults(results: Page[]): Page[];
+    reorder(fromIndex: number, toIndex: number): void;
+    refresh(): Promise<void>;
 }
-import Component from "flarum/common/Component";

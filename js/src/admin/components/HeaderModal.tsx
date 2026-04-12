@@ -271,7 +271,7 @@ export default class HeaderModal extends FormModal {
                     onchange={(e: Event) => {
                       const checked = (e.target as HTMLInputElement).checked;
                       const current = this.pages();
-                      this.pages(checked ? [...current, p] : current.filter((x) => x !== p));
+                      this.pages(checked ? [...current, p] : current.filter((x: string) => x !== p));
                     }}
                   />{' '}
                   {app.translator.trans(`ianm-html-head.admin.modal.pages.${p}`)}

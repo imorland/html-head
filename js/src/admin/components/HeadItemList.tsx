@@ -104,8 +104,8 @@ export default class HeadItemList extends Component {
 
   refresh() {
     this.loading = true;
-    return app.store.find('html-headers', { sort: 'sortOrder' }).then((results: HeadItem[]) => {
-      this.items = results;
+    return app.store.find('html-headers', { sort: 'sortOrder' }).then((results) => {
+      this.items = results as unknown as HeadItem[];
       this.loading = false;
       m.redraw();
     });

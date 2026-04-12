@@ -13,57 +13,59 @@
 namespace IanM\HtmlHead\Content;
 
 use Flarum\Frontend\Document;
+use IanM\HtmlHead\CacheRebuilder;
 use IanM\HtmlHead\Header;
 use Illuminate\Contracts\Cache\Repository as Cache;
-use Illuminate\Support\Str;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Log\LoggerInterface;
 
 class AddHeaders
 {
-    public function __construct(protected Cache $cache, protected LoggerInterface $logger)
-    {
+    public function __construct(
+        private readonly Cache $cache,
+        private readonly CacheRebuilder $rebuilder,
+    ) {
     }
 
-    public function __invoke(Document $document, ServerRequestInterface $request)
+    public function __invoke(Document $document, ServerRequestInterface $request): void
     {
-        $headers = $this->getHeaders();
+        $frontend = $this->resolveFrontend($request);
 
-        foreach ($headers as $header) {
-            if ($this->isValidHeader($header)) {
-                $document->head[] = $header;
-            } else {
-                $this->logger->error('[ianm/html-head] Invalid header: '.$header);
+        $this->inject($document, 'head', $frontend);
+        $this->inject($document, 'foot', $frontend);
+    }
+
+    private function inject(Document $document, string $location, string $frontend): void
+    {
+        $cacheKey = $location === 'head' ? Header::CACHE_KEY_HEAD : Header::CACHE_KEY_FOOT;
+
+        $items = $this->cache->get($cacheKey);
+
+        if ($items === null) {
+            // Cold cache miss — rebuild synchronously, then read back
+            $this->rebuilder->rebuild();
+            $items = $this->cache->get($cacheKey) ?? [];
+        }
+
+        foreach ($items as $item) {
+            if (!in_array($frontend, $item['pages'] ?? ['forum'], true)) {
+                continue;
             }
+
+            // Emit preconnect + dns-prefetch before the item for each cross-origin resource
+            foreach ($item['preconnect_origins'] ?? [] as $origin) {
+                $origin = e($origin);
+                $document->{$location}[] = '<link rel="preconnect" href="'.$origin.'" crossorigin>';
+                $document->{$location}[] = '<link rel="dns-prefetch" href="'.$origin.'">';
+            }
+
+            $document->{$location}[] = $item['html'];
         }
     }
 
-    /**
-     * Check if the given header content is valid.
-     *
-     * @param string $header
-     *
-     * @return bool
-     */
-    protected function isValidHeader(string $header): bool
+    private function resolveFrontend(ServerRequestInterface $request): string
     {
-        return Str::startsWith(trim($header), '<') && Str::endsWith(trim($header), '>');
-    }
+        $routeName = (string) $request->getAttribute('routeName', '');
 
-    /**
-     * Retrieve headers either from cache or database.
-     *
-     * @return array
-     */
-    protected function getHeaders(): array
-    {
-        $headers = $this->cache->get(Header::CACHE_KEY);
-
-        if (!$headers) {
-            $headers = Header::where('active', 1)->pluck('header')->toArray();
-            $this->cache->forever(Header::CACHE_KEY, $headers);
-        }
-
-        return $headers;
+        return str_starts_with($routeName, 'admin') ? 'admin' : 'forum';
     }
 }

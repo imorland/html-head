@@ -25,6 +25,9 @@ return [
     (new Extend\Frontend('forum'))
         ->content(Content\AddHeaders::class),
 
+    (new Extend\Frontend('admin'))
+        ->content(Content\AddHeaders::class),
+
     new Extend\ApiResource(Api\Resource\HeaderResource::class),
 
     (new Extend\Event())

@@ -1,7 +1,253 @@
 .HtmlHeadSettingsPage {
-    margin-top: 25px;
+  margin-top: 25px;
 
-    .Button {
-        margin: 2px;
+  &-help {
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--border-radius);
+    font-size: 13.5px;
+    line-height: 1.6;
+    opacity: 0.85;
+
+    p {
+      margin: 0 0 8px;
     }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+
+      li + li {
+        margin-top: 4px;
+      }
+    }
+  }
+}
+
+.HtmlHeadSettingsPage--controls {
+  margin-bottom: 16px;
+}
+
+.HtmlHeadSettingsPage-table {
+  // Ensure table fills the container
+  .Table {
+    width: 100%;
+  }
+}
+
+// ── Table ────────────────────────────────────────────────────────────────────
+
+.HtmlHeadTable {
+  width: 100%;
+  table-layout: auto;
+
+  td, th {
+    vertical-align: middle;
+    padding: 10px 15px;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+  }
+
+  &-description {
+    max-width: 240px;
+    word-break: break-word;
+  }
+
+  &-pages {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  // Actions column — don't let it expand
+  td:last-child {
+    white-space: nowrap;
+    width: 1%;
+  }
+
+  &-drag {
+    width: 28px;
+    padding: 10px 6px 10px 12px !important;
+    cursor: grab;
+    color: rgba(255, 255, 255, 0.25);
+    text-align: center;
+    user-select: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  &-gripIcon {
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  &-row--dragover {
+    outline: 2px solid var(--primary-color);
+    outline-offset: -2px;
+  }
+}
+
+// ── Badges ───────────────────────────────────────────────────────────────────
+
+.HtmlHeadBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  padding: 3px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+// Type badges — semitransparent so they work on both light and dark themes
+.HtmlHeadBadge--meta   { background: rgba(21, 101, 192, 0.15); color: #5b9cf6; }
+.HtmlHeadBadge--link   { background: rgba(46, 125, 50,  0.15); color: #66bb6a; }
+.HtmlHeadBadge--script { background: rgba(230, 81, 0,   0.18); color: #ffa726; }
+.HtmlHeadBadge--style  { background: rgba(106, 27, 154, 0.15); color: #ce93d8; }
+.HtmlHeadBadge--raw    { background: rgba(255,255,255,  0.07); color: var(--muted-color, #888); border: 1px solid rgba(255,255,255,0.12); }
+
+// Location badges
+.HtmlHeadBadge--head   { background: rgba(1, 87, 155,   0.15); color: #4fc3f7; }
+.HtmlHeadBadge--foot   { background: rgba(136, 14, 79,  0.15); color: #f48fb1; }
+
+// Page badges
+.HtmlHeadBadge--page   { background: rgba(255,255,255,  0.07); color: var(--muted-color, #888); border: 1px solid rgba(255,255,255,0.12); }
+
+// ── Modal ────────────────────────────────────────────────────────────────────
+
+.HeaderModal {
+  &-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  &-col {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  &-checkboxes {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 6px;
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0;
+      font-weight: normal;
+      cursor: pointer;
+    }
+  }
+
+  &-section {
+    margin-bottom: 8px;
+  }
+
+  &-scriptOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &-scriptOption {
+    .checkbox {
+      margin: 0;
+    }
+
+    .helpText {
+      display: block;
+      margin: 2px 0 0 22px;
+    }
+  }
+
+  &-extraRow {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  &-extraKey {
+    flex: 0 0 160px;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+  }
+
+  &-extraValue {
+    flex: 1;
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+  }
+
+  &-code {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
+    resize: vertical;
+  }
+
+  &-preview {
+    margin-bottom: 16px;
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.6;
+      margin-bottom: 6px;
+    }
+  }
+
+  &-previewCode {
+    margin: 0;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--border-radius);
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #a8d8a8;
+    white-space: pre-wrap;
+    word-break: break-all;
+    min-height: 38px;
+  }
+
+  &-previewEmpty {
+    opacity: 0.35;
+    font-style: italic;
+    color: var(--muted-color, #888);
+  }
+
+  hr {
+    margin: 16px 0;
+    border: none;
+    border-top: 1px solid var(--control-bg);
+  }
 }

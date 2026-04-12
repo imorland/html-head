@@ -1,17 +1,23 @@
+import app from 'flarum/admin/app';
 import ExtensionPage from 'flarum/admin/components/ExtensionPage';
-import HeadItem from './components/HeadItemList';
+import HeadItemList from './components/HeadItemList';
 import type Mithril from 'mithril';
 
 export default class HtmlHeadSettingsPage extends ExtensionPage {
-  oninit(vnode: Mithril.Vnode) {
-    super.oninit(vnode);
-  }
-
-  content(vnode: Mithril.Vnode) {
+  content(_vnode: Mithril.Vnode) {
     return (
       <div className="container">
         <div className="HtmlHeadSettingsPage">
-          <HeadItem />
+          <div className="HtmlHeadSettingsPage-help">
+            <p>{app.translator.trans('ianm-html-head.admin.help.intro')}</p>
+            <ul>
+              <li>{app.translator.trans('ianm-html-head.admin.help.preconnect')}</li>
+              <li>{app.translator.trans('ianm-html-head.admin.help.cache')}</li>
+              <li>{app.translator.trans('ianm-html-head.admin.help.pages')}</li>
+              <li>{app.translator.trans('ianm-html-head.admin.help.location')}</li>
+            </ul>
+          </div>
+          <HeadItemList />
         </div>
       </div>
     );

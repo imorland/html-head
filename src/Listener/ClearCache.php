@@ -13,26 +13,40 @@
 namespace IanM\HtmlHead\Listener;
 
 use Flarum\Foundation\Event\ClearingCache;
+use IanM\HtmlHead\CacheRebuilder;
 use IanM\HtmlHead\Event\HeaderCreated;
 use IanM\HtmlHead\Event\HeaderDeleted;
 use IanM\HtmlHead\Event\HeaderUpdated;
-use IanM\HtmlHead\Header;
-use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class ClearCache
 {
-    public function __construct(public Cache $cache)
+    public function __construct(private readonly CacheRebuilder $rebuilder)
     {
     }
 
-    public function subscribe(Dispatcher $events)
+    public function subscribe(Dispatcher $events): void
     {
-        $events->listen([ClearingCache::class, HeaderCreated::class, HeaderUpdated::class, HeaderDeleted::class], [$this, 'clearCache']);
+        // After a header is saved/deleted, invalidate and immediately rebuild
+        // so the next request hits a warm cache.
+        $events->listen(
+            [HeaderCreated::class, HeaderUpdated::class, HeaderDeleted::class],
+            [$this, 'invalidateAndRebuild']
+        );
+
+        // On a full cache:clear command, only invalidate — don't rebuild.
+        // The first request will trigger a cold-miss rebuild automatically.
+        $events->listen(ClearingCache::class, [$this, 'invalidateOnly']);
     }
 
-    public function clearCache($event)
+    public function invalidateAndRebuild(): void
     {
-        $this->cache->forget(Header::CACHE_KEY);
+        $this->rebuilder->invalidate();
+        $this->rebuilder->rebuild();
+    }
+
+    public function invalidateOnly(): void
+    {
+        $this->rebuilder->invalidate();
     }
 }

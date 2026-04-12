@@ -1,45 +1,53 @@
 # HTML Head Items
 
-![Extiverse](https://extiverse.com/extension/ianm/html-head/open-graph-image)
-
 ![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/ianm/html-head.svg)](https://packagist.org/packages/ianm/html-head)
 
-A [Flarum](http://flarum.org) extension that offers a seamless way to add custom items to the HTML &lt;head&gt; section of your forum.
+A [Flarum](http://flarum.org) extension that gives forum administrators full control over custom tags injected into the HTML of their forum — without touching code or config files.
 
-### Features
+## Features
 
-- **Easy Integration**: With just a few clicks, forum administrators can embed additional items directly into the forum's HTML <head>. This is particularly useful for adding meta tags, styles, or any other custom scripts.
+- **Structured tag types** — dedicated forms for `<meta>`, `<link>`, `<script>`, `<style>`, and raw HTML, with type-aware fields and validation for each
+- **Inject into head or body** — choose per item whether it is injected into `<head>` or before `</body>`
+- **Target forum, admin, or both** — each item can be scoped to the forum frontend, the admin panel, or both
+- **Automatic preconnect hints** — `<link rel="preconnect">` and `<link rel="dns-prefetch">` hints are automatically generated for any cross-origin `<link>` or `<script>` tags, warming the connection before the browser needs it
+- **Save-time rendering** — HTML is rendered and cached when you save, not on every page request; no database queries on the hot path
+- **Live preview** — the modal shows a real-time preview of the exact HTML tag that will be injected as you fill in the fields
+- **Sort order** — drag items into the order you need them injected
+- **Clean admin UI** — searchable table with colour-coded type, location and page badges; icon buttons for edit and delete
 
-- **Clean UI**: The extension provides a user-friendly interface that makes it simple to manage and view all added items.
+## Tag types
 
-- **Cache Management**: Any changes made to the head items are automatically reflected, thanks to the efficient cache management in place. This ensures that your updates are immediately visible without any additional steps.
+| Type | What it does |
+|------|-------------|
+| **Meta** | Standard `name`/`content` or Open Graph `property`/`content` meta tags |
+| **Link** | `<link>` tags with guided fields for `rel`, `href`, `as`, `fetchpriority`, `crossorigin`, and any additional attributes (e.g. `sizes`, `hreflang`, `media`) |
+| **Script** | External `<script src>` with `defer`/`async`/`module`/`crossorigin` options, or inline `<script>` blocks |
+| **Style** | Inline `<style>` blocks |
+| **Raw HTML** | Freeform HTML for anything that doesn't fit the above |
 
-- **Error Handling**: In the event that an invalid header item is added, the extension intelligently logs the error, ensuring the forum's functionality isn't compromised.
+## Performance
 
-![image](https://user-images.githubusercontent.com/16573496/104105231-a3bb3000-52a4-11eb-97dc-d4c097471ebd.png)
+Items are rendered to HTML at save time and stored in two cache keys (one per injection location). On page load, `AddHeaders` reads from cache only — no database queries, no per-request rendering. When an item is created, updated, or deleted, only the affected cache keys are invalidated and synchronously rebuilt.
 
-![image](https://user-images.githubusercontent.com/16573496/104105258-cc432a00-52a4-11eb-8ee6-51d75c731b51.png)
+Cross-origin `<link>` and `<script>` tags automatically get preconnect and dns-prefetch hints prepended, reducing connection setup latency for external resources.
 
-### Usage
-
-To use the extension, simply navigate to the admin dashboard. Here you'll find the option to add or modify items that will be included in the forum's HTML `<head>`.
-
-### Installation
-
-Install manually with composer:
+## Installation
 
 ```sh
 composer require ianm/html-head:"*"
+php flarum migrate
+php flarum assets:publish
 ```
 
-### Updating
+## Updating
 
 ```sh
 composer update ianm/html-head
+php flarum migrate
 php flarum cache:clear
 ```
 
-### Links
+## Links
 
 - [Packagist](https://packagist.org/packages/ianm/html-head)
 - [GitHub](https://github.com/imorland/html-head)

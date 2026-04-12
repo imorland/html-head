@@ -107,6 +107,7 @@ class HeaderResource extends AbstractDatabaseResource
                     if ($header->type === 'raw' && !$hasStructuredAttrs && $header->header !== null) {
                         return Header::encode($header->header);
                     }
+
                     return null;
                 })
                 ->set(function (Header $header, ?string $value) {

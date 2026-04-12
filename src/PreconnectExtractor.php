@@ -53,12 +53,13 @@ class PreconnectExtractor
     private function forumOrigin(): string
     {
         $url = $this->config->url();
+
         return $url->getScheme().'://'.$url->getHost();
     }
 
     private function fromLink(array $attrs, string $forumOrigin): ?string
     {
-        $rel  = $attrs['rel'] ?? '';
+        $rel = $attrs['rel'] ?? '';
         $href = $attrs['href'] ?? '';
 
         // rel=preconnect IS the preconnect — don't double-emit

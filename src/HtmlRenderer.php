@@ -105,6 +105,7 @@ class HtmlRenderer
         // Inline script
         if (isset($attrs['inline'])) {
             $type = !empty($attrs['module']) ? ' type="module"' : '';
+
             // Inline JS is admin-only content — trusted, not escaped
             return '<script'.$type.'>'.$attrs['inline'].'</script>';
         }

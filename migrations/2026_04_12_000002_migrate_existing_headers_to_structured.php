@@ -122,6 +122,7 @@ function parseHeaderString(string $html): array
             if (isset($attrs['property']) && isset($attrs['content'])) {
                 return ['type' => 'meta', 'attributes' => ['property' => $attrs['property'], 'content' => $attrs['content']]];
             }
+
             // Some other meta variant — store all attrs and treat as meta
             return ['type' => 'meta', 'attributes' => $attrs];
 
@@ -129,6 +130,7 @@ function parseHeaderString(string $html): array
             if (!isset($attrs['rel'])) {
                 return $fallback;
             }
+
             return ['type' => 'link', 'attributes' => $attrs];
 
         case 'script':
@@ -150,10 +152,12 @@ function parseHeaderString(string $html): array
                 $result['async'] = $element->hasAttribute('async');
                 $result['module'] = isset($attrs['type']) && $attrs['type'] === 'module';
                 unset($result['type']);
+
                 return ['type' => 'script', 'attributes' => $result];
             }
             // Inline script — extract text content
             $inline = $element->textContent;
+
             return ['type' => 'script', 'attributes' => ['inline' => $inline, 'module' => false]];
 
         case 'style':

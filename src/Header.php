@@ -17,13 +17,13 @@ use Flarum\Database\AbstractModel;
 /**
  * @property int         $id
  * @property string|null $description
- * @property string|null $header       Legacy raw HTML (base64-encoded at rest); null for structured rows
+ * @property string|null $header      Legacy raw HTML (base64-encoded at rest); null for structured rows
  * @property bool        $active
- * @property string      $type         'meta'|'link'|'script'|'style'|'raw'
- * @property string      $location     'head'|'foot'
- * @property array       $pages        e.g. ['forum'] or ['forum','admin']
+ * @property string      $type        'meta'|'link'|'script'|'style'|'raw'
+ * @property string      $location    'head'|'foot'
+ * @property array       $pages       e.g. ['forum'] or ['forum','admin']
  * @property int         $sort_order
- * @property array|null  $attributes   Structured attributes keyed by type
+ * @property array|null  $attributes  Structured attributes keyed by type
  */
 class Header extends AbstractModel
 {

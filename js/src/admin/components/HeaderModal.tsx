@@ -1,5 +1,5 @@
 import app from 'flarum/admin/app';
-import FormModal from 'flarum/common/components/FormModal';
+import FormModal, { type IFormModalAttrs } from 'flarum/common/components/FormModal';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
@@ -10,6 +10,10 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').repl
 const TYPES = ['meta', 'link', 'script', 'style', 'raw'] as const;
 const LOCATIONS = ['head', 'foot'] as const;
 const PAGES = ['forum', 'admin'] as const;
+
+// Shown as the field placeholders, so they are also what an untouched field saves as.
+const DEFAULT_META_NAME = 'description';
+const DEFAULT_META_PROPERTY = 'og:title';
 
 const COMMON_META_NAMES = ['description', 'robots', 'theme-color', 'author', 'keywords', 'generator', 'referrer', 'viewport', 'color-scheme'];
 
@@ -42,7 +46,12 @@ const COMMON_LINK_RELS = [
 type LinkAs = '' | 'style' | 'script' | 'font' | 'image' | 'fetch' | 'worker';
 type FetchPriority = '' | 'high' | 'low' | 'auto';
 
-export default class HeaderModal extends FormModal {
+export interface IHeaderModalAttrs extends IFormModalAttrs {
+  item?: HeadItem;
+  onsave?: () => void;
+}
+
+export default class HeaderModal extends FormModal<IHeaderModalAttrs> {
   item!: HeadItem;
 
   // Common fields
@@ -84,7 +93,7 @@ export default class HeaderModal extends FormModal {
   oninit(vnode: Mithril.Vnode) {
     super.oninit(vnode);
 
-    this.item = (this.attrs as any).item || app.store.createRecord('html-headers');
+    this.item = this.attrs.item || app.store.createRecord('html-headers');
 
     const attrs = (this.item.itemAttributes() as Record<string, unknown>) || {};
     const existingType = this.item.type() || 'meta';
@@ -148,13 +157,11 @@ export default class HeaderModal extends FormModal {
 
     switch (this.type()) {
       case 'meta': {
-        const mode = this.metaNameMode();
-        const key = mode === 'property' ? 'property' : 'name';
-        const keyVal = mode === 'property' ? this.metaProperty() : this.metaName();
+        const key = this.metaNameMode() === 'property' ? 'property' : 'name';
+        const typedKey = key === 'property' ? this.metaProperty() : this.metaName();
         const content = this.metaContent();
-        if (!keyVal && !content) return '';
-        let tag = '<meta';
-        if (keyVal) tag += ` ${key}="${esc(keyVal)}"`;
+        if (!typedKey && !content) return '';
+        let tag = `<meta ${key}="${esc(attrs[key] as string)}"`;
         if (content) tag += ` content="${esc(content)}"`;
         return tag + '>';
       }
@@ -320,7 +327,7 @@ export default class HeaderModal extends FormModal {
         {this.metaNameMode() === 'name' ? (
           <div className="Form-group">
             <label>{app.translator.trans('ianm-html-head.admin.modal.meta.name_label')}</label>
-            <input className="FormControl" list="meta-names" bidi={this.metaName} placeholder="description" required />
+            <input className="FormControl" list="meta-names" bidi={this.metaName} placeholder={DEFAULT_META_NAME} />
             <datalist id="meta-names">
               {COMMON_META_NAMES.map((n) => (
                 <option value={n} />
@@ -330,7 +337,7 @@ export default class HeaderModal extends FormModal {
         ) : (
           <div className="Form-group">
             <label>{app.translator.trans('ianm-html-head.admin.modal.meta.property_label')}</label>
-            <input className="FormControl" list="meta-properties" bidi={this.metaProperty} placeholder="og:title" required />
+            <input className="FormControl" list="meta-properties" bidi={this.metaProperty} placeholder={DEFAULT_META_PROPERTY} />
             <datalist id="meta-properties">
               {COMMON_OG_PROPERTIES.map((p) => (
                 <option value={p} />
@@ -599,9 +606,9 @@ export default class HeaderModal extends FormModal {
       case 'meta': {
         const attrs: Record<string, unknown> = { content: this.metaContent() };
         if (this.metaNameMode() === 'property') {
-          attrs.property = this.metaProperty();
+          attrs.property = this.metaProperty() || DEFAULT_META_PROPERTY;
         } else {
-          attrs.name = this.metaName();
+          attrs.name = this.metaName() || DEFAULT_META_NAME;
         }
         return attrs;
       }
@@ -660,6 +667,7 @@ export default class HeaderModal extends FormModal {
       .then(() => {
         (this as any).loading = false;
         (this as any).hide();
+        this.attrs.onsave?.();
       })
       .catch((error: unknown) => {
         (this as any).loading = false;

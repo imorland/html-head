@@ -30,7 +30,7 @@ export default class HeadItemList extends Component {
     return (
       <div>
         <div className="HtmlHeadSettingsPage--controls">
-          <Button className="Button Button--primary" icon="fas fa-plus" onclick={() => app.modal.show(HeaderModal)}>
+          <Button className="Button Button--primary" icon="fas fa-plus" onclick={() => app.modal.show(HeaderModal, { onsave: () => this.refresh() })}>
             {app.translator.trans('ianm-html-head.admin.create_button')}
           </Button>
         </div>

@@ -51,6 +51,13 @@ class AddHeaders
                 continue;
             }
 
+            // Replace a tag Flarum (or another extension) already outputs, such as description, rather than duplicate it
+            $meta = $item['meta'] ?? null;
+            if ($meta !== null && array_key_exists($meta['name'], $document->meta)) {
+                $document->meta[$meta['name']] = $meta['content'];
+                continue;
+            }
+
             // Emit preconnect + dns-prefetch before the item for each cross-origin resource
             foreach ($item['preconnect_origins'] ?? [] as $origin) {
                 $origin = e($origin);

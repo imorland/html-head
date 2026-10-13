@@ -1,6 +1,8 @@
 import app from 'flarum/admin/app';
 import FormModal, { type IFormModalAttrs } from 'flarum/common/components/FormModal';
 import Button from 'flarum/common/components/Button';
+import Select from 'flarum/common/components/Select';
+import Switch from 'flarum/common/components/Switch';
 import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
 import type HeadItem from '../model/HeadItem';
@@ -232,54 +234,39 @@ export default class HeaderModal extends FormModal<IHeaderModalAttrs> {
           {this.helpText('description_help')}
         </div>
 
-        <div className="Form-group HeaderModal-row">
-          <div className="HeaderModal-col">
+        <div className="HeaderModal-row">
+          <div className="Form-group HeaderModal-col">
             <label>{app.translator.trans('ianm-html-head.admin.modal.type_label')}</label>
-            <select
-              className="FormControl"
+            <Select
+              options={Object.fromEntries(TYPES.map((t) => [t, app.translator.trans(`ianm-html-head.admin.modal.type.${t}`, {}, true)]))}
               value={this.type()}
-              onchange={(e: Event) => {
-                this.type((e.target as HTMLSelectElement).value);
-              }}
-            >
-              {TYPES.map((t) => (
-                <option value={t}>{app.translator.trans(`ianm-html-head.admin.modal.type.${t}`)}</option>
-              ))}
-            </select>
+              onchange={(value: string) => this.type(value)}
+            />
           </div>
 
-          <div className="HeaderModal-col">
+          <div className="Form-group HeaderModal-col">
             <label>{app.translator.trans('ianm-html-head.admin.modal.location_label')}</label>
-            <select
-              className="FormControl"
+            <Select
+              options={Object.fromEntries(LOCATIONS.map((l) => [l, app.translator.trans(`ianm-html-head.admin.modal.location.${l}`, {}, true)]))}
               value={this.location()}
-              onchange={(e: Event) => {
-                this.location((e.target as HTMLSelectElement).value);
-              }}
-            >
-              {LOCATIONS.map((l) => (
-                <option value={l}>{app.translator.trans(`ianm-html-head.admin.modal.location.${l}`)}</option>
-              ))}
-            </select>
+              onchange={(value: string) => this.location(value)}
+            />
             {this.helpText('location_help')}
           </div>
 
-          <div className="HeaderModal-col">
+          <div className="Form-group HeaderModal-col">
             <label>{app.translator.trans('ianm-html-head.admin.modal.pages_label')}</label>
-            <div className="HeaderModal-checkboxes">
+            <div className="HeaderModal-pages">
               {PAGES.map((p) => (
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={this.pages().includes(p)}
-                    onchange={(e: Event) => {
-                      const checked = (e.target as HTMLInputElement).checked;
-                      const current = this.pages();
-                      this.pages(checked ? [...current, p] : current.filter((x: string) => x !== p));
-                    }}
-                  />{' '}
+                <Switch
+                  state={this.pages().includes(p)}
+                  onchange={(checked: boolean) => {
+                    const current = this.pages();
+                    this.pages(checked ? [...current, p] : current.filter((x: string) => x !== p));
+                  }}
+                >
                   {app.translator.trans(`ianm-html-head.admin.modal.pages.${p}`)}
-                </label>
+                </Switch>
               ))}
             </div>
           </div>
@@ -390,36 +377,27 @@ export default class HeaderModal extends FormModal<IHeaderModalAttrs> {
         {showAs && (
           <div className="Form-group">
             <label>{app.translator.trans('ianm-html-head.admin.modal.link.as_label')}</label>
-            <select
-              className="FormControl"
+            <Select
+              options={{ '': '—', ...Object.fromEntries((['style', 'script', 'font', 'image', 'fetch', 'worker'] as const).map((a) => [a, a])) }}
               value={this.linkAs()}
-              onchange={(e: Event) => {
-                this.linkAs((e.target as HTMLSelectElement).value as LinkAs);
-              }}
-            >
-              <option value="">—</option>
-              {(['style', 'script', 'font', 'image', 'fetch', 'worker'] as const).map((a) => (
-                <option value={a}>{a}</option>
-              ))}
-            </select>
+              onchange={(value: LinkAs) => this.linkAs(value)}
+            />
             {this.helpText('link.as_help')}
           </div>
         )}
 
         <div className="Form-group">
           <label>{app.translator.trans('ianm-html-head.admin.modal.link.fetchpriority_label')}</label>
-          <select
-            className="FormControl"
-            value={this.linkFetchpriority()}
-            onchange={(e: Event) => {
-              this.linkFetchpriority((e.target as HTMLSelectElement).value as FetchPriority);
+          <Select
+            options={{
+              '': `— ${app.translator.trans('ianm-html-head.admin.modal.link.fetchpriority_default', {}, true)}`,
+              high: 'high',
+              low: 'low',
+              auto: 'auto',
             }}
-          >
-            <option value="">— {app.translator.trans('ianm-html-head.admin.modal.link.fetchpriority_default')}</option>
-            <option value="high">high</option>
-            <option value="low">low</option>
-            <option value="auto">auto</option>
-          </select>
+            value={this.linkFetchpriority()}
+            onchange={(value: FetchPriority) => this.linkFetchpriority(value)}
+          />
           {this.helpText('link.fetchpriority_help')}
         </div>
 

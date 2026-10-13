@@ -141,11 +141,26 @@
     gap: 16px;
     align-items: flex-start;
     flex-wrap: wrap;
+    margin: 16px 0;
   }
 
-  &-col {
+  // Each column is a .Form-group, which core lays out as a flex column
+  &-col.Form-group {
     flex: 1;
     min-width: 140px;
+    margin-bottom: 0;
+  }
+
+  &-col .Select,
+  &-col .Select-input {
+    width: 100%;
+  }
+
+  &-pages {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 6px;
   }
 
   &-checkboxes {
@@ -219,7 +234,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      opacity: 0.6;
+      color: var(--muted-color);
       margin-bottom: 6px;
     }
   }
@@ -227,22 +242,21 @@
   &-previewCode {
     margin: 0;
     padding: 10px 14px;
-    background: rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--code-bg);
+    border: 1px solid var(--control-bg);
     border-radius: var(--border-radius);
     font-family: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
     font-size: 12px;
     line-height: 1.6;
-    color: #a8d8a8;
+    color: var(--code-color);
     white-space: pre-wrap;
     word-break: break-all;
     min-height: 38px;
   }
 
   &-previewEmpty {
-    opacity: 0.35;
     font-style: italic;
-    color: var(--muted-color, #888);
+    color: var(--muted-color);
   }
 
   hr {

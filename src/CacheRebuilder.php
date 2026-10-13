@@ -53,11 +53,33 @@ class CacheRebuilder
                 'html'               => $rendered,
                 'preconnect_origins' => $this->extractor->extract($header),
                 'pages'              => $header->pages ?? ['forum'],
+                'meta'               => $location === 'head' ? $this->namedMeta($header) : null,
             ];
         }
 
         $this->cache->forever(Header::CACHE_KEY_HEAD, $byLocation['head']);
         $this->cache->forever(Header::CACHE_KEY_FOOT, $byLocation['foot']);
+    }
+
+    /**
+     * A meta item that is just name + content, which fits Document::$meta.
+     *
+     * @return array{name: string, content: string}|null
+     */
+    private function namedMeta(Header $header): ?array
+    {
+        if ($header->type !== 'meta') {
+            return null;
+        }
+
+        $rawJson = $header->getRawOriginal('attributes');
+        $attrs = $rawJson ? (json_decode($rawJson, true) ?? []) : [];
+
+        if (count($attrs) !== 2 || !is_string($attrs['name'] ?? null) || $attrs['name'] === '' || !is_string($attrs['content'] ?? null)) {
+            return null;
+        }
+
+        return ['name' => $attrs['name'], 'content' => $attrs['content']];
     }
 
     public function invalidate(): void

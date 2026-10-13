@@ -11,10 +11,6 @@ const TYPES = ['meta', 'link', 'script', 'style', 'raw'] as const;
 const LOCATIONS = ['head', 'foot'] as const;
 const PAGES = ['forum', 'admin'] as const;
 
-// Shown as the field placeholders, so they are also what an untouched field saves as.
-const DEFAULT_META_NAME = 'description';
-const DEFAULT_META_PROPERTY = 'og:title';
-
 const COMMON_META_NAMES = ['description', 'robots', 'theme-color', 'author', 'keywords', 'generator', 'referrer', 'viewport', 'color-scheme'];
 
 const COMMON_OG_PROPERTIES = [
@@ -158,10 +154,11 @@ export default class HeaderModal extends FormModal<IHeaderModalAttrs> {
     switch (this.type()) {
       case 'meta': {
         const key = this.metaNameMode() === 'property' ? 'property' : 'name';
-        const typedKey = key === 'property' ? this.metaProperty() : this.metaName();
+        const keyVal = attrs[key] as string;
         const content = this.metaContent();
-        if (!typedKey && !content) return '';
-        let tag = `<meta ${key}="${esc(attrs[key] as string)}"`;
+        if (!keyVal && !content) return '';
+        let tag = '<meta';
+        if (keyVal) tag += ` ${key}="${esc(keyVal)}"`;
         if (content) tag += ` content="${esc(content)}"`;
         return tag + '>';
       }
@@ -327,17 +324,30 @@ export default class HeaderModal extends FormModal<IHeaderModalAttrs> {
         {this.metaNameMode() === 'name' ? (
           <div className="Form-group">
             <label>{app.translator.trans('ianm-html-head.admin.modal.meta.name_label')}</label>
-            <input className="FormControl" list="meta-names" bidi={this.metaName} placeholder={DEFAULT_META_NAME} />
+            <input
+              className="FormControl"
+              list="meta-names"
+              bidi={this.metaName}
+              placeholder={app.translator.trans('ianm-html-head.admin.modal.meta.name_placeholder', {}, true)}
+              required
+            />
             <datalist id="meta-names">
               {COMMON_META_NAMES.map((n) => (
                 <option value={n} />
               ))}
             </datalist>
+            {this.helpText('meta.name_help')}
           </div>
         ) : (
           <div className="Form-group">
             <label>{app.translator.trans('ianm-html-head.admin.modal.meta.property_label')}</label>
-            <input className="FormControl" list="meta-properties" bidi={this.metaProperty} placeholder={DEFAULT_META_PROPERTY} />
+            <input
+              className="FormControl"
+              list="meta-properties"
+              bidi={this.metaProperty}
+              placeholder={app.translator.trans('ianm-html-head.admin.modal.meta.property_placeholder', {}, true)}
+              required
+            />
             <datalist id="meta-properties">
               {COMMON_OG_PROPERTIES.map((p) => (
                 <option value={p} />
@@ -606,9 +616,9 @@ export default class HeaderModal extends FormModal<IHeaderModalAttrs> {
       case 'meta': {
         const attrs: Record<string, unknown> = { content: this.metaContent() };
         if (this.metaNameMode() === 'property') {
-          attrs.property = this.metaProperty() || DEFAULT_META_PROPERTY;
+          attrs.property = this.metaProperty();
         } else {
-          attrs.name = this.metaName() || DEFAULT_META_NAME;
+          attrs.name = this.metaName();
         }
         return attrs;
       }

@@ -23,10 +23,10 @@ return [
     new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Frontend('forum'))
-        ->content(Content\AddHeaders::class),
+        ->content(Content\AddForumHeaders::class),
 
     (new Extend\Frontend('admin'))
-        ->content(Content\AddHeaders::class),
+        ->content(Content\AddAdminHeaders::class),
 
     new Extend\ApiResource(Api\Resource\HeaderResource::class),
 

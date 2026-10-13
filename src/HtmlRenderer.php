@@ -156,7 +156,7 @@ class HtmlRenderer
             }
         }
 
-        if ($header->header === null) {
+        if ((string) $header->header === '') {
             return '';
         }
 

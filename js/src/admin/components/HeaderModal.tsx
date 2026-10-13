@@ -1,5 +1,5 @@
 import app from 'flarum/admin/app';
-import FormModal from 'flarum/common/components/FormModal';
+import FormModal, { type IFormModalAttrs } from 'flarum/common/components/FormModal';
 import Button from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
@@ -42,7 +42,12 @@ const COMMON_LINK_RELS = [
 type LinkAs = '' | 'style' | 'script' | 'font' | 'image' | 'fetch' | 'worker';
 type FetchPriority = '' | 'high' | 'low' | 'auto';
 
-export default class HeaderModal extends FormModal {
+export interface IHeaderModalAttrs extends IFormModalAttrs {
+  item?: HeadItem;
+  onsave?: () => void;
+}
+
+export default class HeaderModal extends FormModal<IHeaderModalAttrs> {
   item!: HeadItem;
 
   // Common fields
@@ -84,7 +89,7 @@ export default class HeaderModal extends FormModal {
   oninit(vnode: Mithril.Vnode) {
     super.oninit(vnode);
 
-    this.item = (this.attrs as any).item || app.store.createRecord('html-headers');
+    this.item = this.attrs.item || app.store.createRecord('html-headers');
 
     const attrs = (this.item.itemAttributes() as Record<string, unknown>) || {};
     const existingType = this.item.type() || 'meta';
@@ -660,6 +665,7 @@ export default class HeaderModal extends FormModal {
       .then(() => {
         (this as any).loading = false;
         (this as any).hide();
+        this.attrs.onsave?.();
       })
       .catch((error: unknown) => {
         (this as any).loading = false;

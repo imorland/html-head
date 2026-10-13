@@ -2,3 +2,6 @@ node_modules
 vendor
 composer.lock
 .aider*
+tests/.phpunit.cache
+tests/.phpunit.result.cache
+/tests/integration/tmp

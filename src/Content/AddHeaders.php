@@ -18,8 +18,13 @@ use IanM\HtmlHead\Header;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AddHeaders
+/**
+ * Injects the items applied to one frontend; see AddForumHeaders and AddAdminHeaders.
+ */
+abstract class AddHeaders
 {
+    abstract protected function frontend(): string;
+
     public function __construct(
         private readonly Cache $cache,
         private readonly CacheRebuilder $rebuilder,
@@ -28,7 +33,7 @@ class AddHeaders
 
     public function __invoke(Document $document, ServerRequestInterface $request): void
     {
-        $frontend = $this->resolveFrontend($request);
+        $frontend = $this->frontend();
 
         $this->inject($document, 'head', $frontend);
         $this->inject($document, 'foot', $frontend);
@@ -60,12 +65,5 @@ class AddHeaders
 
             $document->{$location}[] = $item['html'];
         }
-    }
-
-    private function resolveFrontend(ServerRequestInterface $request): string
-    {
-        $routeName = (string) $request->getAttribute('routeName', '');
-
-        return str_starts_with($routeName, 'admin') ? 'admin' : 'forum';
     }
 }

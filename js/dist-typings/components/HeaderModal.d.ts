@@ -1,10 +1,14 @@
-import FormModal from 'flarum/common/components/FormModal';
+import FormModal, { type IFormModalAttrs } from 'flarum/common/components/FormModal';
 import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
 import type HeadItem from '../model/HeadItem';
 type LinkAs = '' | 'style' | 'script' | 'font' | 'image' | 'fetch' | 'worker';
 type FetchPriority = '' | 'high' | 'low' | 'auto';
-export default class HeaderModal extends FormModal {
+export interface IHeaderModalAttrs extends IFormModalAttrs {
+    item?: HeadItem;
+    onsave?: () => void;
+}
+export default class HeaderModal extends FormModal<IHeaderModalAttrs> {
     item: HeadItem;
     description: ReturnType<typeof Stream<string>>;
     type: ReturnType<typeof Stream<string>>;

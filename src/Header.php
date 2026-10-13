@@ -17,7 +17,7 @@ use Flarum\Database\AbstractModel;
 /**
  * @property int         $id
  * @property string|null $description
- * @property string|null $header      Legacy raw HTML (base64-encoded at rest); null for structured rows
+ * @property string|null $header      Legacy raw HTML (base64-encoded at rest); empty for structured rows
  * @property bool        $active
  * @property string      $type        'meta'|'link'|'script'|'style'|'raw'
  * @property string      $location    'head'|'foot'
@@ -65,6 +65,19 @@ class Header extends AbstractModel
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    protected static function booted(): void
+    {
+        // Rows without legacy HTML store an empty string rather than null, so
+        // saving never depends on the header column having been made nullable:
+        // a forum that updates without running `php flarum migrate` still has
+        // the original NOT NULL column.
+        static::saving(function (self $header) {
+            if ($header->header === null) {
+                $header->header = '';
+            }
+        });
+    }
 
     /**
      * Whether this is a legacy row with raw HTML stored in the header column.

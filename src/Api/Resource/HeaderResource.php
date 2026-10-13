@@ -104,7 +104,7 @@ class HeaderResource extends AbstractDatabaseResource
                     // Expose for legacy raw rows: type=raw with no structured attributes
                     // Use getRawOriginal to bypass the Eloquent 'attributes' name collision
                     $hasStructuredAttrs = !empty($header->getRawOriginal('attributes'));
-                    if ($header->type === 'raw' && !$hasStructuredAttrs && $header->header !== null) {
+                    if ($header->type === 'raw' && !$hasStructuredAttrs && (string) $header->header !== '') {
                         return Header::encode($header->header);
                     }
 
